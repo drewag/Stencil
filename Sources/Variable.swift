@@ -110,7 +110,12 @@ public struct Variable: Equatable, Resolvable {
         }
       #endif
     } else if let value = context {
-      return Mirror(reflecting: value).getValue(for: bit)
+      if let value = Mirror(reflecting: value).getValue(for: bit) {
+        return value
+      }
+      else if let referancable = value as? DynamicStringReferencable {
+        return referancable[bit]
+      }
     }
 
     return nil
